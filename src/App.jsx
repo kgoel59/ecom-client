@@ -1,11 +1,9 @@
 import React from 'react';
-import ProductList from 'components/Product/ProductList'
+import Layout from 'views/Layout';
 
 function App() {
   return (
-    <div className="App">
-      <ProductList/>
-    </div>
+    <Layout/>
   );
 }
 

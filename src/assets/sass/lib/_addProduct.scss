@@ -1,0 +1,18 @@
+.addProduct {
+    max-width : 40rem;
+    .card-title {
+        text-align: center;
+        background-color: #e9ecef;
+        margin: 0px;
+    }
+    .input-group-prepend {
+        width: 28%;
+        .input-group-text {
+            width: 100%;
+        }
+    }
+    button {
+        font-size: 20px;
+        width: 100%;
+    }
+}
