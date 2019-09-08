@@ -12,7 +12,7 @@ const Product = ({ product }) => {
             </div>
         </div>
         <div className="row">
-            <div className="col-md">
+            <div className="col">
                 <p>{product.description}</p>
             </div>
             <div className="col-md-4">

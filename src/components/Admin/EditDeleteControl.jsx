@@ -1,14 +1,14 @@
 import React from 'react';
 
-const EditDeleteControl = () => {
+const EditDeleteControl = ({index,deleteProduct,editProduct}) => {
     return (
         <div>
             <div className="row">
                 <div className="col">
-                    <button className="btn btn-primary">Edit</button>
+                    <button className="btn btn-primary" onClick={()=>{editProduct(index)}}>Edit</button>
                 </div>
                 <div className="col">
-                    <button className="btn btn-primary">Delete</button>
+                    <button className="btn btn-primary" onClick={()=>{deleteProduct(index)}}>Delete</button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,11 @@
-.list-group {
-   max-width: 20rem; 
+.product-list {
+   margin: 10px;
+   margin-left: 50px;
+   .product-list-item {
+      min-width: 18rem;
+      margin: 10px;
+      float: left;
+   }
    .btn {
       width: 100%;
    }
