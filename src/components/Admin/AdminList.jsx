@@ -12,16 +12,12 @@ class AdminList extends Component {
     }
 
     componentDidMount() {
-        this.fetchProducts();
-    }
-
-    fetchProducts() {
         fetch(`http://localhost:1337/product`)
         .then(res => res.json())
         .then((result) => {
             this.setState({
                 products: result
-            })
+            });
         });
     }
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 class AddProduct extends Component {
     constructor(props) {
@@ -31,6 +30,8 @@ class AddProduct extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(product)
+        }).then(()=>{
+            this.props.history.push('/admin');
         })
     }
 
@@ -103,10 +104,9 @@ class AddProduct extends Component {
                         onChange={(event) => { this.setProductPrice(event.target.value) }} />
                 </div>
 
-                <Link to='/admin'>
-                    <button type="button" className="btn btn-primary"
-                    onClick={ ()=>{this.EditProduct()} }>Save</button>
-                </Link>
+                <button type="button" className="btn btn-primary"
+                    onClick={ ()=>{this.EditProduct()} }>Save
+                </button>
             </div>
         );
     }
