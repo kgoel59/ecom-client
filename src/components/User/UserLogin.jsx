@@ -33,13 +33,14 @@ class UserLogin extends Component {
       method: 'POST',
       headers: {
         'Accept': 'text/html',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
+      credentials: 'include'
     })
     .then(res => res.text())
     .then((result) => {
-      if(result == 'Login Successful') {
+      if(result === 'Login Successful') {
         this.props.history.push('/products');
       } else {
         alert(result);

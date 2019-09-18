@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Navbar from 'components/Navbar/Navbar';
 
 class Layout extends Component {
     render() {
         return (
             <div className="App">
                 <div>
-                    <Navbar/>
+                    {this.props.nav}
                 </div>
                 <div className="container-fluid">
                     {this.props.main}

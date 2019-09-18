@@ -20,6 +20,30 @@ class UserList extends Component {
             });
     }
 
+    AddtoCart = (index) => {
+        let id = this.state.products[index]._id;
+
+        fetch(`http://localhost:1337/addToCart/${id}`,{
+            credentials: 'include'
+        })
+        .then(async res => {
+            if (res.status == 200) {
+                return res.json();
+            } else {
+                alert(await res.text());
+            }
+        })
+        .then((result) => {
+            if(result.newProduct != null) {
+            let products = this.state.products;
+            products[index] = result.newProduct;
+            this.setState({
+                products
+            })
+        }
+        })
+    }
+
     Products = () => {
         return this.state.products.map((product, index) => {
             return (
@@ -27,6 +51,11 @@ class UserList extends Component {
                     <div className="card-body">
                         <Product product={product} />
                     </div>
+                    <button className="btn btn-primary" onClick={
+                        ()=>{
+                            this.AddtoCart(index);
+                        }
+                    }>Add to Cart</button>
                 </div>
             );
         });
