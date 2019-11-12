@@ -59,7 +59,7 @@ class UserRegister extends Component {
     })
     .then((res) => res.json())
     .then((result) => {
-      console.log(result);
+      localStorage.setItem("auth",result.data.createUser.jwt);
       this.props.history.push('/')
     })
   }

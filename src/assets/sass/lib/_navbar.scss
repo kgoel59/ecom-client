@@ -1,9 +1,19 @@
 .navbar {
     .navbar-nav {
-        .username {
-            border: 3px solid white;
-            padding: 3px;
-            color: white;
+        .nav-item {
+            .username {
+                border: 3px solid white;
+                padding: 3px;
+                color: white;
+                font-size: 25px;
+            }
+
+            .cart {
+                float: right;
+                color: white;
+                font-size: 25px;
+                margin-left: 15px;
+            }
         }
     }
 }

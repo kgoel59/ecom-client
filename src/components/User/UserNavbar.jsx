@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../Navbar/Navbar';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class UserNavbar extends Component {
     constructor(props) {
         super(props);
@@ -12,9 +16,19 @@ class UserNavbar extends Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:1337/username`, {
-                method: 'GET',
-                credentials: 'include'
+        const auth = localStorage.getItem("auth");
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': auth
+            },
+            body: JSON.stringify({query: `query {
+                getUser {
+                  name
+                }
+              }`})
         })
         .then(res => {
             if(res.status === 200) {
@@ -26,14 +40,21 @@ class UserNavbar extends Component {
             }
         })
         .then((result)=>{
-            this.setState(result);
+            this.setState({
+                name: result.data.getUser.name
+            });
         });
     }
 
     getUserName() {
         if (this.state.name != null) {
             return (
-                <li className="nav-item username"><h4>{this.state.name}</h4></li>
+                <>
+                <li className="nav-item">
+                    <Link to="/products"><span className="username">{this.state.name}</span></Link>
+                    <Link to="/products/cart"><i className="fa fa-shopping-cart cart" aria-hidden="true"></i></Link>
+                </li>
+                </>
             );
         } else {
             return (

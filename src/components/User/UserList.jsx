@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import Product from '../Product/Product';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class UserList extends Component {
 
     constructor(props) {
@@ -11,36 +15,55 @@ class UserList extends Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:1337/product`)
-            .then(res => res.json())
-            .then((result) => {
-                this.setState({
-                    products: result
-                });
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({query: `query {
+                getProducts {
+                  id
+                  name
+                  description
+                  quantity
+                  price
+                }
+              }`})
+        })
+        .then(res => res.json())
+        .then((result) => {
+            this.setState({
+                products: result.data.getProducts
             });
+        });
     }
 
     AddtoCart = (index) => {
-        let id = this.state.products[index]._id;
+        let id = this.state.products[index].id;
+        const auth = localStorage.getItem("auth");
 
-        fetch(`http://localhost:1337/addToCart/${id}`,{
-            credentials: 'include'
+        fetch(API_URL,{
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': auth
+            },
+            body: JSON.stringify({query: `mutation {
+                addToCart(id: ${id}) {
+                    quantity
+                }
+            }`})
         })
-        .then(async res => {
-            if (res.status === 200) {
-                return res.json();
-            } else {
-                alert(await res.text());
-            }
-        })
+        .then(async res => res.json())
         .then((result) => {
-            if(result.newProduct != null) {
-            let products = this.state.products;
-            products[index] = result.newProduct;
+            const products = this.state.products;
+            products[index].quantity = result.data.addToCart.quantity;
+
             this.setState({
-                products
+                products: products
             })
-        }
         })
     }
 

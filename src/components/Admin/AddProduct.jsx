@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class AddProduct extends Component {
     constructor(props) {
         super(props);
@@ -14,20 +18,25 @@ class AddProduct extends Component {
     
 
     CreateProduct = () => {
-        let product = {
-            name:        this.state.productName,
-            description: this.state.productDesc,
-            quantity:    this.state.productQuantity,
-            price:       this.state.productPrice
-        }
+        const name =       this.state.productName;
+        const description = this.state.productDesc;
+        const quantity =    this.state.productQuantity;
+        const price =       this.state.productPrice;
 
-        fetch(`http://localhost:1337/product`, {
+        fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(product)
+            body: JSON.stringify({query: `mutation {
+                createProduct(data: {name: "${name}", description: "${description}", quantity: ${quantity}, price: ${price}}) {
+                  name
+                  price
+                  description
+                  quantity
+                }
+              }`})
         }).then(()=>{
             this.props.history.push('/admin')
         })

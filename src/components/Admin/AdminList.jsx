@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import Product from '../Product/Product';
 import EditDeleteControl from './EditDeleteControl';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class AdminList extends Component {
 
     constructor(props) {
@@ -12,30 +16,50 @@ class AdminList extends Component {
     }
 
     componentDidMount() {
-        fetch(`http://localhost:1337/product`)
+        fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({query: `query {
+                getProducts {
+                  id
+                  name
+                  description
+                  quantity
+                  price
+                }
+              }`})
+        })
         .then(res => res.json())
         .then((result) => {
             this.setState({
-                products: result
+                products: result.data.getProducts
             });
         });
     }
 
     DeleteProduct = (index) => {
-        let id = this.state.products[index]._id;
+        let id = this.state.products[index].id;
 
-        fetch(`http://localhost:1337/product/${id}`,
-        {
-            method: 'DELETE',
+        fetch(API_URL, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
-        });
-
+            },
+            body: JSON.stringify({query: `mutation {
+                deleteProduct(id: ${id}) {
+                  id
+                }
+              }`})
+        })
+        .then(() => {
         this.setState(prevState => ({
             products: [...prevState.products.slice(0,index),...prevState.products.slice(index+1)]
-        }))
+            }))
+        })
     }
 
     EditProduct = (index) => {

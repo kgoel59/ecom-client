@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class UserLogin extends Component {
   constructor(props){
     super(props);
@@ -24,26 +28,28 @@ class UserLogin extends Component {
   }
 
   Login = () => {
-    let user = {
-      email: this.state.userEmail,
-      password: this.state.userPassword
-    }
+      const email = this.state.userEmail;
+      const password = this.state.userPassword;
 
-    fetch(`http://localhost:1337/login`, {
+    fetch(API_URL, {
       method: 'POST',
       headers: {
         'Accept': 'text/html',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(user),
-      credentials: 'include'
+      body: JSON.stringify({query: `query {
+        loginUser(email: "${email}",password: "${password}") {
+          jwt
+        }
+      }`})
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then((result) => {
-      if(result === 'Login Successful') {
+      if(result.data.loginUser != null) {
+        localStorage.setItem("auth",result.data.loginUser.jwt);
         this.props.history.push('/products');
       } else {
-        alert(result);
+        alert("Login Fail");
       }
     })
   }

@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
+
 class AddProduct extends Component {
     constructor(props) {
         super(props);
 
         let product = this.props.location.state;
-        this.id = product._id;
+        this.id = product.id;
         this.state = {
             productName: product.name,
             productDesc: product.description,
@@ -16,20 +20,27 @@ class AddProduct extends Component {
     
 
     EditProduct = () => {
-        let product = {
-            name:        this.state.productName,
-            description: this.state.productDesc,
-            quantity:    this.state.productQuantity,
-            price:       this.state.productPrice
-        }, id = this.id;
+        const name =       this.state.productName;
+        const description = this.state.productDesc;
+        const quantity =    this.state.productQuantity;
+        const price =       this.state.productPrice;
+        const id = this.id;
 
-        fetch(`http://localhost:1337/product/${id}`, {
-            method: 'PUT',
+        fetch(API_URL, {
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(product)
+            body: JSON.stringify({query: `mutation {
+                updateProduct(id: ${id}, data: {name: "${name}", description: "${description}", quantity: ${quantity}, price: ${price}}) {
+                  id
+                  name
+                  price
+                  description
+                  quantity
+                }
+              }`})
         }).then(()=>{
             this.props.history.push('/admin');
         })
