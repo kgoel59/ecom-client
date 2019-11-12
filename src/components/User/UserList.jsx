@@ -27,7 +27,7 @@ class UserList extends Component {
             credentials: 'include'
         })
         .then(async res => {
-            if (res.status == 200) {
+            if (res.status === 200) {
                 return res.json();
             } else {
                 alert(await res.text());

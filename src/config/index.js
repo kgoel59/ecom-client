@@ -1,0 +1,1 @@
+export {SERVER} from './server.config';

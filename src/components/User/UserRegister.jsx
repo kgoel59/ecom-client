@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { SERVER } from '../../config';
+
+const { API_URL } = SERVER;
 
 class UserRegister extends Component {
   constructor(props) {
@@ -38,20 +41,25 @@ class UserRegister extends Component {
   }
 
   CreateUser = () => {
-    let user = {
-      name: this.state.userName,
-      email: this.state.userEmail,
-      password: this.state.userPassword
-    }
+    const name= this.state.userName;
+    const email = this.state.userEmail;
+    const password = this.state.userPassword;
 
-    fetch(`http://localhost:1337/register`, {
+    fetch(`${API_URL}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(user)
-    }).then(() => {
+      body: JSON.stringify({query: `mutation {
+        createUser(data: {name:"${name}", email: "${email}" ,password: "${password}"}) {
+          jwt
+      }
+    }`}),
+    })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result);
       this.props.history.push('/')
     })
   }
